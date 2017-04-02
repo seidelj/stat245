@@ -168,7 +168,88 @@ Taking the deritive of the above equation results in
 
 \[ \Pr\{T_1 = s \ | \ X_t=1\} = \frac{1}{t}. \]
 
+\end{enumerate}
 
+\subsection{5. Data from Poisson process}
+A detector counts the number of particles emmoted from a radioactive source over the couse of 10-second intervals.  For $180$ such $10$-second intervals, the following counts were observed:
+
+\begin{table}[H]
+\centering
+\begin{tabular}{cc}
+Count & \# Itervals \\ \hline
+$0$   & $23$        \\
+$1$   & $77$        \\
+$2$   & $34$        \\
+$3$   & $26$        \\
+$4$   & $13$        \\
+$5$   & $7$
+\end{tabular}
+\end{table}
+
+This table states, for example, that in 34 of the 10-second intervals a count of 2 was recorded.  Sometimes, however, the detector did not function properly and recorded counts over intervals of length 20 seconds.  This happened 20 times and recorded counts are
+
+\begin{table}[H]
+\centering
+\begin{tabular}{cc}
+Count & \# Itervals \\ \hline
+$0$   & $2$        \\
+$1$   & $4$        \\
+$2$   & $9$        \\
+$3$   & $5$        \\
+\end{tabular}
+\end{table}
+
+Assume a Poisson process model for the particle emission process.  Let $\lambda > 0$ (time unit = $1$ sec.) be the unknown rate of the Poisson process.
+
+\begin{enumerate}
+
+\item Formulate an appropriate likelihood function for the described scenario and derive the maximum likelihood estimator for $\hat{\lambda}$ of the rate $\lambda$.  Compute $\hat{\lambda}$ for the above data.
+
+First observe
+\[ \Pr\{X=x\} = e^{-\lambda} \frac{\lambda^x}{x!} \]
+
+then
+\[ \text{lik}(\lambda) = \prod_{i=1}^n e^{-\lambda} \frac{\lambda^x_i}{x_i!}  \]
+
+and the log is
+\begin{align*}
+l(\lambda) &= \sum_{i=1}^n(-\lambda + X_i\log \lambda - \log(X_i) \\
+&= -n\lambda + \log\lambda \sum_{i=1}^n X_i - \sum_{i=1}^n \log X_i!.\\
+\end{align*}
+
+Setting $l'(\lambda)$ to zero gives
+
+\[l'(\lambda) = -n + \frac{1}{\lambda}\sum{i=1}^n X_i = 0 \]
+
+\[ \hat{\lambda} = \frac{1}{n}\sum_{i=1}^n X_i = \overline{X}. \]
+
+That data observes $347$ occurances over $2200$ seconds which can be use to compute
+\[ \hat{\lambda} = \frac{347}{2200} = .1577. \]
+
+\item What approximation to the distribution of $\hat{\lambda}$ does the central limit theorem suggest\marginnote{Explanation of this in Rice p.262}?
+
+Let
+\[ S=X_1 + X_2 \]
+and $\hat{\lambda}=\frac{s}{n}$ is a random variable.
+
+\[ \Pr\{\hat{\lambda}=v \} = \Pr\{ s=nv \} = e^{-n\lambda_0}\frac{(n\lambda_0)^{nv}}{(nv)!} \]
+
+for $v$ such that $nv$ is a nonnegative integer.
+
+Since $S \sim \text{Pois}(n\lambda_0)$
+\[ E(\hat{\lambda}) = frac{1}{n}E(S) = \lambda_0 \]
+and
+\[ \Var(\hat{\lambda}) = \frac{1}{n^2} \Var(S) = \frac{\lambda_0}{n}.\]
+
+Since $E(\hat{\lambda}) = \lambda_0$, $\hat{\lambda}$ is unbiased and centered at $\lambda_0$ with standard error
+
+\[ \sigma_{\hat{\lambda}} = \sqrt{\frac{\lambda_0}{n}}.\]
+
+The standard error can be estimated
+
+\[ s_{\hat{\lambda}} = \sqrt{\frac{\hat{\lambda}}{n}} \]
+
+therefore $\hat{\lambda} \sim N(\lambda_0, s_{\hat{\lambda}})$.
 \end{enumerate}
 
 \end{document}
