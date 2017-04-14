@@ -226,6 +226,10 @@ Setting $l'(\lambda)$ to zero gives
 That data observes $347$ occurances over $2200$ seconds which can be use to compute
 \[ \hat{\lambda} = \frac{347}{2200} = .1577. \]
 
+The above method can be consicely stated and found by deriving $\hat{\lambda}$ beginging with
+
+\[ \text{Lik}(\theta) = \prod_{i=1}^{180} e^{-10\lambda} \frac{(10\lambda)^{y_i}}{y_i!} \cdot \prod_{j=1}^{20} e^{-20\lambda} \frac{(20\lambda)^{z_j}}{z_j!} \]
+
 \item What approximation to the distribution of $\hat{\lambda}$ does the central limit theorem suggest\marginnote{Explanation of this in Rice p.262}?
 
 Let
