@@ -1,0 +1,211 @@
+\documentclass{tufte-book}
+
+\usepackage{amsmath, amsthm}
+\usepackage{graphicx}
+\setkeys{Gin}{width=\linewidth,totalheight=\textheight,keepaspectratio}
+\graphicspath{{graphics/}}
+
+\title{STAT  245\\Homework 2}
+\author{Joe Seidel}
+\date{\today}
+
+\input{../preamble.tex}
+
+\begin{document}
+
+\maketitle
+\pagenumbering{gobble}
+\newpage
+\pagenumbering{arabic}
+
+\subsection{Confidence intervals}
+Let $X_1,...,X_n$ be independent $N(\mu, \sigma^2)$ random variables.
+
+\begin{enumerate}
+\item[(a)] Determine random variables $L_{\sigma^2}(\alpha)$ and $U_{\sigma^2}(\alpha)$ such that the interval $[L_{\sigma^2}(\alpha),U_{\sigma^2}(\alpha)$ is a $(1-\alpha)$ confidence interval for $\sigma^2$.  In doing this ensure that
+\[ \Pr(L_{\sigma^2}>\sigma^2) = \Pr(U_{\sigma^2} < \sigma^2) \]
+
+Consider two estimators for $\sigma^2$
+\[ s^2 = \frac{1}{n-1}\sum_{i=1}^n(X_i-\overline{X})^2 \]
+and
+\[ \hat{\sigma}^2 = \frac{1}{n}\sum_{i=1}^n(X_i - \overline{X})^2. \]
+
+Since
+\[ \frac{(n-1)s^2}{\sigma^2} \sim \chi^2_{n-1}. \]
+then
+\[ \frac{n\hat{\sigma}^2}{\sigma^2} \sim \chi_{n-1}^2 \]
+and
+\[ \Pr(\chi_{n-1}^2(1-\alpha/2) \leq \frac{n\hat{\sigma}^2}{\sigma^2} \leq \chi_{n-1}^2(\alpha/2)) = 1-\alpha \]
+where $\chi_{m}^2(\alpha)$ denotes the point beyond which the chi-squared distribution with $m$ degrees of freedom has probabilty $\alpha$.  With some manipulation
+\[ \Pr\big(\frac{n\hat{\sigma}^2}{\chi_{n-1}^2(\alpha/2)}\leq \sigma^2 \leq \frac{n\hat{\sigma}^2}{\chi_{n-1}^2(1-\alpha/2)}\big) = 1-\alpha \]
+
+hence the interval for $\sigma^2$ is
+\[ \big[\frac{n\hat{\sigma}^2}{\chi_{n-1}^2(\alpha/2)},\frac{n\hat{\sigma}^2}{\chi_{n-1}^2(1-\alpha/2)}\Big]. \]
+
+\item[(b)] Find $(1-\alpha)100\%$ confidence interval for $\mu$ using t-statistic.
+
+We can assume that $\hat{\mu} \sim N(\mu, \frac{s^2}{n})$, approximately from CLT.
+Since
+\[ \frac{\sqrt{n}(\overline{X}-\mu)}{s} \sim t_{n-1} \]
+where $s^2$ is as defined in part $(a)$ then we can build an interval for $\overline{X}$ without knowing $\sigma^2$.  Let $t_m(\alpha)$ denote that point beyond which the t-distribution with $m$ degrees of freedom has probabilty $\alpha$. By symmetry of t
+\[ \Pr(-t_{n-1}(\alpha/2) \leq \frac{\sqrt{n}(\overline{X}-\mu)}{s} \leq t_{n-1}(\alpha/2) ) = 1-\alpha \]
+
+which can be manipulated to
+\[ \Pr( \overline{X}-\frac{s}{\sqrt{n}}t_{n-1}(\alpha/2)\leq \mu \leq \overline{X}+\frac{s}{\sqrt{n}}t_{n-1}(\alpha/2)) = 1-\alpha \]
+forming the interval
+\[ \big[ \overline{X} \pm \frac{s}{\sqrt{n}}t_{n-1}(\alpha/2) \big]. \]
+
+\item[(c)] What is the probability that both $\mu \in [L_\mu(\alpha), U_\mu(\alpha)]$ and $\sigma^2 \in [L_{\sigma^2}(\alpha), U_{\sigma^2}(\alpha)]$.
+
+Since $s^2$ appears in both pairs of endpoints, there is no reason to think that the intervals are independent.  The event that $\mu \in [L_{\mu}(\alpha), U_\mu(\alpha)]$ and $\sigma^2 \in [L_{\sigma^2}(\alpha), U_{\sigma^2}(\alpha)]$ can be represented as the region in $\overline{X} - s$ plane bound by the following lines
+\begin{align*}
+L_1:& \ s = \sqrt{\sigma^2 \chi_{n-1}^2(\alpha/2)/(n-1)}\\
+L_2:& \ s = \sqrt{\sigma^2 \chi_{n-1}^2(1-\alpha/2)/(n-1)}\\
+L_3:& \ \overline{X} = \mu + \frac{s}{\sqrt{n}}t_{n-1}(\alpha/2)\\
+L_4:& \ \overline{X} = \mu + \frac{s}{\sqrt{n}}t_{n-1}(1-\alpha/2).
+\end{align*}
+
+Then
+\begin{align*}
+\Pr&(\mu \in [L_{\mu}(\alpha), U_\mu(\alpha)], \sigma^2 \in [L_{\sigma^2}(\alpha), U_{\sigma^2}(\alpha)])\\
+&= 1 -\Pr(\mu \not\in [L_{\mu}(\alpha), U_\mu(\alpha)] \text{ or } \sigma^2 \not\in [L_{\sigma^2}(\alpha), U_{\sigma^2}(\alpha)])\\
+&\geq 1 - \Pr(\mu \in [L_{\mu}(\alpha), U_\mu(\alpha)])-  \Pr(\sigma^2 \in [L_{\sigma^2}(\alpha), U_{\sigma^2}(\alpha)])\\
+&\geq 1 - 2\alpha
+\end{align*}
+
+\item[(d)] Certainly there exist many confidence intervals for $\sigma^2$, and the answer in (a) is one of them.  Find the confidence interval which has minimum length.
+
+Since the Chi-squared distribution is not symmetric for small values of $m$, you need find points on the distribution $a,b$ such that $f(a)=f(b)$ and $F(b)-F(a)=0$.  There is some R code in the directory that will solve if degress of freedom are provided.
+
+To obtain a different confidence interval choose $0<a<b$ such that
+\[ \Pr(a < \frac{(n-1)s^2}{\sigma^2} < b) = 1-\alpha \rightarrow (*). \]
+
+Therefore
+\[ \Big( \frac{(n-1)s^2}{b}, \frac{(n-1)s^2}{a} \Big)\]
+is a $100(1-\alpha)\%$ confidence interval for $\sigma^2$ with length of \[(n-1)s^2\big(\frac{1}{a} - \frac{1}{b}\big).\]
+
+We need to find a choice $a$ and $b$ that minimizes $\frac{1}{a} - \frac{1}{b}$ subject to the constraint $(*)$. Since $(*)$ determines $b$ as a function of $a$ we can use implicit differentiation:
+\[ \frac{d}{da} \int_{a}^{b} f_{n-1}(x)dx = \frac{d}{da}(1-\alpha)\]
+where $f_{n-1}$ is the density $\chi_{n-1}^2$.   Then
+\[ -f_{n-1}(a) + f_{n-1}(b)\frac{db}{da} = 0 \Rightarrow \frac{db}{da}= \frac{f_{n-1}(a)}{f_{n-1}(b)}. \]
+
+Now
+\[ \frac{d}{da}\big(\frac{1}{a} - \frac{1}{b}\big) = -\frac{1}{a^2} + \frac{1}{b^2}\frac{f_{n-1}(a)}{f_{n-1}(b)}\]
+which equals $0$ when $a^2f_{n-1}(a) = b^2f_{n-1}(b)$.  This result can be verified as a minumum thus an interval of mininum length when $a,b$ such that
+\[ a^2f_{n-1}(a) = b^2f_{n-1}(b) \]
+\end{enumerate}
+
+\subsection{2. Likelihood ratio test}
+Consider i.i.d. observations $X_1,...,X_n \sim p_{\theta}$.  One needs to test
+\[ H_0  : \ \theta = \theta_0 \ , \ H_1  : \ \theta=\theta_1. \]
+
+The likelihood ratio test is
+
+\[ \mathbb{I}\Big\{\prod_{i=1}^n \frac{p_{\theta_1}(X_i)}{p_{\theta_0}(X_i)} > C \Big\}, \]
+
+where C is some number such that the Type-I error is $\alpha$.
+
+\begin{enumerate}
+\item[(a)] Find the $\alpha$-level likelihood ratio test for $H_0: \ \theta=5$ vs $H_1: \ \theta=10$ with observations $X_1,...,X_n sim N(\theta,1)$.
+
+Reject $H_0$ when $\overline{X} > C$, e.g. large values of $\overline{X}$ should be considered evidence for $H_1$\marginnote{Stigler 6-6 derives where this idea comes from.}.
+
+Let
+\begin{align*}
+\alpha &= \Pr(\overline{X} > C \mid H_0)\\
+&= \Pr(\frac{\sqrt{n}(\overline{X}-\mu_0)}{\sigma_0} > \frac{\sqrt{n}(C-\mu_0)}{\sigma_0} \mid H_0)\\
+&= \Pr(Z > \frac{\sqrt{n}(C-\mu_0)}{\sigma_0}
+\end{align*}
+Where $Z \sim N(0,1)$. To find $C$, observe
+\[ z_{1-\alpha} = \frac{\sqrt{n}(C-\mu_0)}{\sigma_0} \Rightarrow C = \mu_0 + z_{1-\alpha}\big(\frac{\sigma_0}{\sqrt{n}}\big). \]
+
+We know $\mu_0=5$ and $\sigma_0=\sigma=1$ so
+
+\[ C = 5 + z_{1-\alpha}\frac{1}{\sqrt{n}}. \]
+
+The test will reject $H_0$ when $\overline{X} > C$ for observed $X_1,...,X_n$ and given $\alpha$.
+
+\item[(b)] What is the power of the test when $n=10,50,100$?
+Power is
+\[ \pi = \Pr(\overline{X}>C \mid H_1) = 1-\beta\]
+where
+\begin{align*}
+\beta &= \Pr(\overline{X} \leq C \mid H_1)\\
+&= \Pr(\overline{X} - \mu_1 \leq C-\mu_1)\\
+&= \Pr(Z \leq (5+z_{1-\alpha}\frac{1}{\sqrt{n}})-10))\\
+&= \Pr(Z \leq -5 + z_{1-\alpha}(\frac{1}{\sqrt{n}}))
+\end{align*}
+
+Where $\beta \rightarrow pnorm(-5)$ as $n \rightarrow \infty$ so Power increases as $n$ increases.
+
+\item[(c)] Find the $\alpha$-level likelihood ratio test for $H_0: \ \theta=0$ vs $H_1: \ \theta = n^{-1/2}$ with observations $X_1,...,X_n \sim N(\theta, 1)$,  What is the power of the test when $n=10,50,100$?
+
+Observe, where $n^{-1/2}=\frac{1}{\sqrt{n}}$ we reject $H_0$ when $\overline{X} > C$ where
+\[ C= z_{1-\alpha}(\frac{1}{\sqrt{n}}). \]
+The power of this test is $1-\beta$ where
+\begin{align*}
+\beta &= \Pr(\overline{X} \leq C \mid H_1)\\
+&=\Pr(Z \leq \frac{z{1-\alpha}}{\sqrt{n}} - \frac{1}{\sqrt{n}}) \\
+&= \Pr(Z \leq \frac{1}{\sqrt{n}}(z_{1-\alpha} - 1 )).
+\end{align*}
+
+As $n \rightarrow \infty$ $\beta \rightarrow .5$.
+
+\item[(d)] Discuse your discovery.
+
+Power and $H_1$ both depend on $n$ smaple size.  When $n$ increases, power decreases to $.5$ because it becomes harder to discern $H_0$ from $H_1$.
+
+\subsection{3. Chi-squared}
+Consider i.i.d. observations $X_1,...,X_n \sim N(\mu, \sigma^2)$.  The mean $\mu$ is unknown.  Construct an $\alpha$-level test for $H_0: \ \sigma^2=\sigma_0^2$ vs $H_1: \ \sigma^2 \neq \sigma_0^2$.
+
+The test statistic will be
+
+\[ \frac{(n-1)s^2}{\sigma^2_0} \sim \chi_{n-1}^2. \]
+
+Reject $H_0$ if $\chi_{n-1}^2 \in W$ where $W=[0, z_1) \cup (z_2, \infty]$ and $z_1,z_2 \in \mathbb{R}$.  To determine critical values, $z_1,z_2$ use Chi-squared table with $n-1$ degrees of freedom to satisfy
+\[ \alpha = \Pr(\frac{(n-1)s^2}{\sigma^2_0} \in W) \]
+alternatively
+\[ 1-\alpha = \Pr(\frac{(n-1)s^2}{\sigma^2_0} \not\in W) \]
+which is similar to confidence interval found in question 1.
+\[ 1-\alpha = \Pr\big( \frac{(n-1)s^2}{\chi_{n-1}^2(\alpha/2)} \leq \sigma_0^2 \leq \frac{(n-1)s^2}{\chi_{n-1}^2(1-\alpha/2)}\big). \]
+
+Which can be written as confidence interval
+\[  \big[\frac{(n-1)s^2}{\chi_{n-1}^2(\alpha/2)},  \frac{(n-1)s^2}{\chi_{n-1}^2(1-\alpha/2)} \big]. \]
+
+Therefore, our test rejects $H_0$ if $\sigma_0^2$ not in the CI.
+
+Specifically stated, reject the null when
+\[ \frac{(n-1)s^2}{\sigma_0^2} < \chi_{n-1}^2(\alpha/2) \text{ or } \frac{(n-1)s^2}{\sigma_0^2} > \chi_{n-1}^2(1-\alpha/2) \]
+where $\chi_{n-1}^2(a)$ is the $a$ percentile of of a Chi-squared distribution with $n-1$ degress of freedom.
+\end{enumerate}
+
+\subsection{4. Problem 1 on Page 362}
+A coin is thrown independently 10 times to test the hypothesis that the probability of heads is $\frac{1}{2}$ versus the alternative that the probability is not $\frac{1}{2}$.  The test rejects if either $0$ or $10$ heads are observed.
+
+\begin{enumerate}
+
+\item[(a)] What is the significance level of the test?
+
+\begin{align*}
+\alpha &= \Pr(\text{Reject }H_0 \mid H_0)\\
+&= \Pr(X=0 \text{ or } X=10 \mid H_0)\\
+&= \Pr(X=0) + \Pr(X=10)\\
+&= \binom{10}{0}.5^0(.5)^{10} + \binom{10}{10}.5^{10}(1-.5)^0\\
+&= .00195
+\end{align*}
+
+\item[(b)] If in fact the probability of heads is $.1$, what is the power of the test?
+
+\begin{align*}
+\pi &= 1-\beta = \Pr(\text{Reject }H_0 \mid p=.1)\\
+&= \Pr(X=0 \text{ or } X=10 \mid p=.1)\\
+&= \binom{10}{0}.1^0(1-.1)^{10} + \binom{10}{10}.1^{10}(1-.1)^0\\
+&= .349
+\end{align*}
+
+
+\end{enumerate}
+
+
+\end{document}
+\grid

@@ -145,7 +145,14 @@ Plug in the values to find the joint distrubution.
 
 \item[(b)]Assume that a student recieved a midterm score that is one standard deviation below the midterm mean.  What do you expect his/her final score to be?
 
-\[ E(Y \mid X=63) = 70 + (\frac{49}{74})(63-70) = 65 \]
+Since $X=\mu_x - \sigma_x$
+\begin{align*}
+E[Y\mid X] &= \mu_y + \rho \frac{\sigma_Y}{\sigma_X}(\mu_x - \sigma_x - \mu_x)\\
+&= \mu_y + \rho \frac{\sigma_Y}{\sigma_X}(- \sigma_x)\\
+&= \mu_y - \rho \cdot \sigma_Y\\
+&= 70 - \frac{49}{74} \cdot \sqrt{49+25}\\
+&= 64.3
+\end{align*}
 
 \end{enumerate}
 

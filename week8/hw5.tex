@@ -1,0 +1,118 @@
+\documentclass{tufte-book}
+
+\usepackage{amsmath, amsthm}
+\usepackage{graphicx}
+\setkeys{Gin}{width=\linewidth,totalheight=\textheight,keepaspectratio}
+\graphicspath{{graphics/}}
+
+\title{STAT  245\\Homework 5}
+\author{Joe Seidel}
+\date{\today}
+
+\input{../preamble.tex}
+
+\begin{document}
+
+\maketitle
+\pagenumbering{gobble}
+\newpage
+\pagenumbering{arabic}
+
+\subsection{Projection Matrix 1.}
+A symmetric Matrix $P \in \mathbb{R}^{n \times n}$ is a projection matrix if $P^2=P$.
+
+\begin{enumerate}
+
+\item[(a)] Find $(I_n - P)^2$ and $(I_n - P)P$.
+
+\item[(b)] Assume rank$(P)=r$, and then find all eigenvalues of $P$.
+
+\end{enumerate}
+
+\subsection{Projection Matrix 2.} A symmetric matrix $P\in \mathbb{R}^{n \times n}$ is a project matrix if $P^2=P$.
+
+\begin{enumerate}
+
+\item[(a)] For any $X \in \mathbb{R}^{n \times p}$ such that $(X^TX)^{-1}$ exists.  Show that $X(X^TX)^{-1}X^T$ is a projection matrix.
+
+\begin{align*}
+(X(X^TX)^{-1}X^T)^2 &= X(X^TX)^{-1}X^TX(X^TX)^{-1}X^T\\
+&= X I_n (X^TX)^{-1}X^T\\
+&= X(X^TX)^{-1}X^T
+\end{align*}
+
+\item[(b)] Let $\mathbb{1} \in \mathbb{R}^{n \times 1}$ be a column vector of all ones.  Show that $n^{-1} \mathbb{1}\mathbb{1}^T$ is a projection matrix.
+
+\begin{align*}
+(n^{-1} \mathbb{1}\mathbb{1}^T)^2 &= n^{-1} \mathbb{1}\mathbb{1}^Tn^{-1} \mathbb{1}\mathbb{1}^T\\
+&= \frac{1}{n^2} \mathbb{1}\mathbb{1}^T \mathbb{1}\mathbb{1}^T\\
+&= \frac{1}{n^2} \mathbb{1}n\mathbb{1}^T\\
+&= n^{-1} \mathbb{1}\mathbb{1}^T
+\end{align*}
+
+\item[(c)] If both $P_1$ and $P_2$ are projection matricies.  Assume $P_1P_2=0$.  Show $P_1+P_2$ is a projection matrix.
+
+\begin{align*}
+(P_1+P_2)^2 &= (P_1+P_2)(P_1+P_2)\\
+&=P_1^2 + 2P_1P_2 + P_2^2\\
+&=P_1^2 + P_2^2\\
+&=P_1 + P_2
+\end{align*}
+
+\end{enumerate}
+
+\subsection{Projection Matrix 3.} A symmetric matrix $P\in \mathbb{R}^{n\times n}$ is a projection matrix if $P^2=P$.  Assume rank$P=r$, for $z \sim N(0, I_n)$, use eigenvalue decomposition to find the distribution of $z^TPz$.
+
+
+\subsection{Variance Bias Trade-off.}  For any estimator $\hat{\theta}$, prove $\mathbb{E}(\hat{\theta}-\theta)^2 = \Var(\hat{\theta})+ (\mathbb{E}\hat{\theta} - \theta)^2$.
+
+\begin{align*}
+\operatorname{MSE}(\hat{\theta}) &= \mathbb{E} \left [(\hat{\theta}-\theta)^2 \right ] \\
+&=  \mathbb{E}\left[\left(\hat{\theta}-\mathbb{E} [\hat\theta]+\mathbb{E}[\hat\theta]-\theta\right)^2\right]\\
+&= \mathbb{E}\left[\left(\hat{\theta}-\mathbb{E}[\hat\theta]\right)^2 +2\left (\hat{\theta}-\mathbb{E}[\hat\theta] \right ) \left (\mathbb{E}[\hat\theta]-\theta \right )+\left( \mathbb{E}[\hat\theta]-\theta \right)^2\right] \\
+&= \mathbb{E}\left[\left(\hat{\theta}-\mathbb{E}[\hat\theta]\right)^2\right]+\mathbb{E}\left[2 \left (\hat{\theta}-\mathbb{E}[\hat\theta] \right ) \left (\mathbb{E}[\hat\theta]-\theta \right ) \right] + \mathbb{E}\left [ \left(\mathbb{E}[\hat\theta]-\theta\right)^2 \right] \\
+&=  \mathbb{E}\left[\left(\hat{\theta}-\mathbb{E}[\hat\theta]\right)^2\right]+ 2 \left(\mathbb{E}[\hat\theta]-\theta\right) \mathbb{E}\left[\hat{\theta}-\mathbb{E}[\hat\theta] \right] +  \left(\mathbb{E}[\hat\theta]-\theta\right)^2 && \mathbb{E}[\hat\theta]-\theta = \text{const.} \\
+&=  \mathbb{E}\left[\left(\hat{\theta}-\mathbb{E}[\hat\theta]\right)^2\right]+ 2 \left(\mathbb{E}[\hat\theta]-\theta\right) \left ( \mathbb{E}[\hat{\theta}]-\mathbb{E}[\hat\theta] \right )+  \left(\mathbb{E}[\hat\theta]-\theta\right)^2 && \mathbb{E}[\hat\theta] = \text{const.} \\
+&= \mathbb{E}\left[\left(\hat{\theta}-\mathbb{E}[\hat\theta]\right)^2\right]+\left(\mathbb{E}[\hat\theta]-\theta\right)^2\\
+&= \operatorname{Var}(\hat\theta)+ \operatorname{Bias}(\hat\theta,\theta)^2
+\end{align*}
+
+
+\subsection{Variance Estimation 1.} For the linear model $y \sim N(X\beta, \ \sigma^2I_n)$., recal that $\hat{y}=Hy$ with $H=X(X^TX)^{-1}X^T$.  The residual is defined as $\hat{e}=(I-H)y$.  In the class we derived that $\|\hat{e}\|^2/\sigma^2 \sim \chi_{n-p}^2$.  Use this fact to answer the following questions:
+
+\begin{enumerate}
+\item[(a)] Define $\hat{\sigma}^2 = \frac{1}{n-p}\|\hat{e}\|^2$. What is $\mathbb{E}\hat{\sigma}^2$?
+
+\item[(b)] What is $\mathbb{E}(\hat{\sigma}^2-\sigma^2)^2$?
+
+\item[(c)] Define $\tilde{\sigma}^2= \frac{1}{n}\|\hat{e}^2\|^2$.  What is $\mathbb{E}(\tilde{\sigma}^2 - \sigma^2)$?
+
+\item[(d)] Consider $\sigma_c^2 = c\|\hat{e}\|^2$.  Find the $c$ such that $\E(\sigma_c^2-\sigma^2)^2$ is the smallest.
+\end{enumerate}
+
+\subsection{Variance estimation 2.} Consider linear model $y \sim N(X\beta,\ , \sigma^2I_n)$.
+
+\begin{enumerate}
+\item[(a)] Find the joint MLE of $(\beta, \sigma^2)$, denoted as $(\hat{\beta},\hat{\sigma}^2)$.
+
+\item[(b)] Construct a pivotal of $\sigma^2$ using $\hat{\sigma}^2$.  Find an exact $95\%$ confidence interval of $\sigma^2$.
+\end{enumerate}
+
+\subsection{Data Analysis} Download NewHaven.txt from chalk.  Set a up a working directory on your own computer, and read the data into R.  Write a report of data analysis that addresses the following items.  The report should be printed and submitted together with the homework.  No need to include the code.
+
+\begin{enumerate}
+
+\item[(a)] Summarize the whole data set.
+
+\item[(b)] Pick up a subset of rows that you want to study.  For example you can study all houses or condos.  You can also study houses that are not too expensive.  Whatever subset of rows you pick, you need to justify your choice with some understandings of the data set.
+
+\item[(c)] Pick up at least five variables.  Explain what they are, and fit a linear models to predict current values.
+
+\item[(d)] Analyze the inear model result.  Use the function cooks.distance to find outliers.  Use Google search to check why these are outliers. Fit the model after removing those outliders.
+
+\item[(e)] You may want to repeat the last step.   Write a nice paragraph with a clear conlcusion for your findings.  Try to include many nice plots in your report that it is easy to read.
+
+\end{enumerate}
+
+\end{document}
+\grid

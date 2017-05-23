@@ -1,0 +1,240 @@
+\documentclass{tufte-book}
+
+\usepackage{amsmath, amsthm}
+\usepackage{graphicx}
+\setkeys{Gin}{width=\linewidth,totalheight=\textheight,keepaspectratio}
+\graphicspath{{graphics/}}
+
+\title{STAT  245\\Homework 4}
+\author{Joe Seidel}
+\date{\today}
+
+\input{../preamble.tex}
+
+\begin{document}
+
+\maketitle
+\pagenumbering{gobble}
+\newpage
+\pagenumbering{arabic}
+
+\subsection{Sampling distribution: simple derivation}
+Consider independent observations $y_1,...,y_n \sim N(\beta_0, \sigma^2)$
+.  The MLE of $\beta_0$ is $\hat{\beta}_0=\overline{y}$.  The residual is $\hat{e}_i=y_i-\overline{y}$ for $i=1,...,n$.  In class we learned $\overline{y}\sim N(\beta_0, \frac{\sigma^2}{n})$ and $\sum_{i=1}^n \hat{e}_i^2/\sigma^2 \sim \chi_{n-1}^2$.  In order to obtain a t-distribution, we need independence between $\overline{y}$ and $\sum_{i=1}^n \hat{e}_i^2$.  Here is a simple way to do it.
+
+\begin{enumerate}
+
+\item[(a)] Calculate $\Cov(\overline{y},\hat{e}_i)$
+
+\begin{align*}
+\Cov(\overline{y}, \hat{e}_i) &= \Cov(\overline{y},y_i-\overline{y})\\
+&= \Cov(\overline{y}, y_i) - \Cov(\overline{y},\overline{y})\\
+&= \frac{\sigma^2}{n} - \frac{\sigma^2}{n} = 0\\
+\end{align*}
+
+\item[(b)] Can you claim the independence between $\overline{y}$ and $\sum_{i=1}^n \hat{e}_i^2$?
+
+Since we found $\Cov(\overline{y},\hat{e}_i)=0$ by the Gaussian assumption we may assume independence.
+
+\end{enumerate}
+
+\subsection{Residual} Consider independent observations $y_i \sim N(\beta_0+\beta_1x_i,\ \sigma^2)$ for $i=1,...,n$.  For the LSE $\hat{\beta}_0$ and $\hat{\beta}_1$, define the residual $\hat{e}_i = y_i - (\hat{\beta}_0+\hat{\beta}_1x_i)$ for $i=1,...,n$.
+\begin{enumerate}
+\item[(a)] Calculate $\mathbb{E}\big(\frac{1}{n-2} \sum_{i=1}^n \hat{e}_i^2\big)$.
+
+First calculate $\E(\hat{e}_i^2)$, where we can rewrite $\hat{e}_i=y_i-\overline{y}-\hat{\beta}_1(x_i-\overline{x})$.  Since $\E(\hat{e}_i)=0$ we get
+\begin{align*}
+\E(\hat{e}_i^2) &= \Var(\hat{e}_i) \\
+&= \Var(y_i-\overline{y}) + (x_i-\overline{x})^2\Var(\hat{\beta}_i) - 2(x_i-\overline{x})\Cov(y_i-\overline{y}, \hat{\beta}_1).\\
+\end{align*}
+
+Then,
+
+\[ \Var(y_i-\overline{y}) = \frac{n-1}{n}\sigma^2,\]
+\[ \Var(\hat{\beta}_1) = \frac{\sigma^2}{\sum_{i=1}^n(x_i-\overline{x})^2}, \]
+
+and
+\begin{align*}
+\Cov(y_i-\overline{y},\hat{\beta}_1) &= \Cov\Big(y_i-\overline{y}, \frac{\sum_{j=1}^n(x_j-\overline{x})(y_j-\overline{y})}{\sum_{j=1}^n(x_j-\overline{x})^2}  \Big)\\
+&= \frac{\sum_{j=1}^n(x_j-\overline{x})\Cov(y_i-\overline{y}, y_j-\overline{y})}{\sum_{j=1}^n(x_j-\overline{x})^2}.\\
+\end{align*}
+
+When $i=j$,
+
+\[ \Cov(y_i-\overline{y},y_j-\overline{y})=\Var(y_i-\overline{y}) = \frac{n-1}{n}\sigma^2 \]
+otherwise
+
+\[ \Cov(y_i-\overline{y},y_j-\overline{y})= -\frac{\sigma^2}{n}.\]
+
+Then
+
+\[ \frac{\sum_{j=1}^n(x_j-\overline{x})\Cov(y_i-\overline{y}, y_j-\overline{y})}{\sum_{j=1}^n(x_j-\overline{x})^2} = \frac{(x_i-\overline{x})\frac{n-1}{n}\sigma^2-\sum_{j\neq i}(x_j-\overline{x})\frac{\sigma^2}{n}}{\sum_{j=1}^n(x_j-\overline{x})^2}, \]
+which can also be written
+
+\[ \frac{(x_i-\overline{x})\frac{n-1}{n}\sigma^2-\sum_{j\neq i}(x_j-\overline{x})\frac{\sigma^2}{n}}{\sum_{j=1}^n(x_j-\overline{x})^2} = \frac{\sigma^2(x_i-\overline{x})}{\sum_{j=1}^n(x_j-\overline{x})^2}. \]
+
+Now we have everything we need to find
+
+\begin{align*}
+\E(\hat{e}_i^2 &= \Var(y_i-\overline{y}) + (x_i-\overline{x})^2\Var(\hat{\beta}_i) - 2(x_i-\overline{x})\Cov(y_i-\overline{y}, \hat{\beta}_1)\\
+&= \frac{n-1}{n}\sigma^2  + (x_i-\overline{x})^2\frac{\sigma^2}{\sum_{i=1}^n(x_i-\overline{x})^2} - 2\frac{\sigma^2(x_i-\overline{x})}{\sum_{j=1}^n(x_j-\overline{x})^2}.\\
+\end{align*}
+
+Finally, we have
+
+\[ \sum_{i=1}^2 \E(\hat{e}_i^2 = (n-1)\sigma^2 +\sigma^2 -2\sigma^2 = (n-2)\sigma^2 \]
+
+which means
+
+\[ \E(\frac{1}{n-2}\sum_{i=1}^n \hat{e}_i^2) = \sigma^2. \]
+
+\item[(b)] Calculate $\Cov(\hat{\beta}_1, \ \hat{e}_i)$.
+
+\begin{align*}
+\Cov(\hat{\beta}_1, \ \hat{e}_i) &= \Cov\big(\hat{\beta}_1, y_i-\overline{y}-\hat{\beta}_1(x_i-\overline{x})\big)\\
+&= \Cov(\hat{\beta}_1, y_i-\overline{y})-(x_i-\overline{x})\Cov(\hat{\beta}_1,\hat{\beta}_1)\\
+\end{align*}
+
+Where we've found $\Cov(\hat{\beta}_1, y_i-\overline{y})$ in the previous part and
+
+\[ \Cov(\hat{\beta}_1, \ \hat{e}_i) = 0 \]
+
+\item[(c)] Can you claim the independence between $\hat{\beta}_1$ and $\sum_{i=1}^n \hat{e}_i^2$?
+
+From the result in part (b) and the Gaussian assumption, they are independent.
+
+\item[(d)] Are $\hat{\beta}_0$ and $\sum_{i=1}^n \hat{e}_i^2$ independent?
+
+\begin{align*}
+\Cov(\hat{\beta}_0, \hat{e}_i) &= \Cov(\overline{y}-\hat{\beta}_1x_i,y_i-\overline{y}-\hat{\beta}_1(x_i-\overline{x}))\\
+&= -(x_i-\overline{x})\Cov(\overline{y},\hat{\beta}_1) + \overline{x}(x_i-\overline{x})\Var(\hat{\beta}_1)-\overline{x}\Cov(\hat{\beta}_1, y_i-\overline{y}).
+\end{align*}
+
+All items above have been found in previous part of this problem which are used to find
+\[ \Cov(\hat{\beta}_0, \hat{e}_i) = 0\]
+allowing us to claim independence.
+
+\end{enumerate}
+
+\subsection{Joint Distribution of $(\hat{\beta}_0, \hat{\beta}_1)$} Consider independent observations $y_i \sim N(\beta_0+\beta_1x_i,\ \sigma^2)$ for $i=1,...,n$. For the LSE $\hat{\beta}_0$ and $\hat{\beta}_1$ we derived $\Var(\hat{\beta}_0)$ and $\Var(\hat{\beta}_1)$ in the class.
+
+\begin{enumerate}
+
+\item[(a)] Calculate $\Cov(\hat{\beta}_0,\hat{\beta}_1)$.
+First observe
+\begin{align*}
+\Cov(\overline{y}, \hat{\beta}_1) &= \Cov\Big(\overline{y}, \frac{\sum_{i=1}^n(x_i-\overline{x})(y_i-\overline{y})}{\sum_{i=1}^n(x_i-\overline{x})^2}\Big)\\
+&= \frac{\sum_{i=1}^n(x_i - \overline{x})(\Cov(\overline{y}, y_i-\overline{y}))}{\sum_{i=1}^n(x_i-\overline{x})^2}\\
+&= 0
+\end{align*}
+
+Then
+\begin{align*}
+\Cov(\hat{\beta}_0, \hat{\beta}_1) &= \Cov(\overline{y}-\hat{\beta}_1\overline{x}, \hat{\beta}_1)\\
+&= -\overline{x}\Cov(\hat{\beta}_1,\hat{\beta}_1)\\
+&= -\overline{x}\frac{\sigma^2}{\sum_{i=1}^n(x_i-\overline{x})^2}.
+\end{align*}
+
+\item[(b)] What is the joint distribution of $(\hat{\beta}_0,\hat{\beta}_1)$
+
+\[ N
+\begin{pmatrix}
+
+\begin{pmatrix}
+\beta_0\\
+\beta_1\\
+\end{pmatrix}
+,\begin{pmatrix}
+\frac{\sigma^2}{n} + \frac{\overline{x}^2\sigma^2}{\sum_{i=1}^n(x_i-\overline{x})^2} & -\overline{x}\frac{\sigma^2}{\sum_{i=1}^n(x_i-\overline{x})^2}\\
+-\overline{x}\frac{\sigma^2}{\sum_{i=1}^n(x_i-\overline{x})^2} & \frac{\sigma^2}{\sum_{i=1}^n(x_i-\overline{x})^2}
+\end{pmatrix}
+
+\end{pmatrix}
+\]
+\end{enumerate}
+
+\subsection{Linear regression without slope} Consider independent observations $y_i \sim N(\beta_1x_i, \sigma^2)$ for $i=1,...,n$.
+
+\begin{enumerate}
+
+\item[(a)] Find the MLE for $\beta_1$, denoted as $\hat{\beta}_1$.
+
+Finding the MLE boils down to minimizing the following element of the joint likelihood function $f(y_1,y_2,...y_n\mid \beta_1)$ where $f(x)$ is the normal density,
+\[ \sum_{i=1}^n(y_i-\beta_1x_i)^2. \]
+
+Minimize by taking the derivative and setting it equal to $0$,
+\[ \hat{\beta}_1 = \frac{\sum_{i=1}^n x_iy_i}{\sum_{i=1}^nx_i^2}. \]
+
+\item[(b)] Find $\mathbb{E}(\hat{\beta}_1)$.
+
+\[ \E(\hat{\beta}_1) = \frac{\sum_{i=1}^n x_i\E(y_i)}{\sum_{i=1}^nx_i^2} = \beta_1 \]
+
+\item[(c)] Find $\Var(\hat{\beta}_1)$.
+
+\[ \Var(\hat{\beta}_1) = \frac{\sum_{i=1}^n x_i\Var(y_i)}{\sum_{i=1}^nx_i^2}= \frac{\sigma^2}{\sum_{i=1}^nx_i^2} .\]
+
+\item[(d)] What is the distribution of $\hat{\beta}_1$?
+
+\[ \hat{\beta}_1 \sim N(\beta_1, \ \frac{\sigma^2}{\sum_{i=1}^nx_i^2}) \]
+
+\end{enumerate}
+
+\subsection{Linear regression with centered covariates} Some people like to center there $x_i$ before applying regression.  This leads to the model $y_i \sim N(\beta_0 + \beta_1(x_i-\overline{x}), \ \sigma^2)$ independently for $i=1,...,n$.
+
+\begin{enumerate}
+\item[(a)] Find the MLE for $\beta_0, \beta_1$, denoted as $\hat{\beta}_0, \hat{\beta}_1$.
+
+Minimize
+\[ \sum_{i=1}^n(y_i - \beta_0 - \beta_1(x_i-\overline{x}))^2 \]
+by setting the derivative equal to 0 to find the MLE
+\[ \hat{\beta}_1 = \frac{\sum_{i=1}^n(x_i-\overline{x})(y_i-\overline{y})}{\sum_{i=1}^n(x_i-\overline{x})^2} \]
+and
+\[ \hat{\beta}_0 = \overline{y}.\]
+
+\item[(b)] Find the expectations of $\hat{\beta}_0, \hat{\beta}_1$.
+
+Expectations are $\beta_0$ and $\beta_1$, respectively.
+
+\item[(c)] Find the variances of $\hat{\beta}_0, \hat{\beta}_1$.
+
+\[ \Var(\hat{\beta}_1)=\frac{\sigma^2}{\sum_{i=1}^n(x_i-\overline{x})^2} \]
+\[ \Var(\hat{\beta}_0)=\frac{\sigma^2}{n} \]
+\end{enumerate}
+
+
+\subsection{Check the matrix formula}  For the multivariate linear regression with model $y\sim N(X\beta, \sigma^2 I_n)$, we showed in class that the MLE is $\hat{\beta}=(X^TX)^{-1}X^Ty$. It has distribution $\hat{\beta} \sim N(\beta, \ \sigma^2(X^TX)^{-1})$.  Now consider the simple case of $p=2$ so that
+
+\[ \beta=
+\begin{pmatrix}
+\beta_0 \\
+\beta_1 \\
+\end{pmatrix}
+ \ , \ X =
+\begin{pmatrix}
+1 & x_1 \\
+1 & x_2 \\
+\vdots & \vdots \\
+1 & x_n
+\end{pmatrix}
+\ , \ Y=
+\begin{pmatrix}
+y_1 \\
+y_2 \\
+\vdots \\
+y_n
+\end{pmatrix}
+\]
+
+\begin{enumerate}
+
+\item{(a)} For $p=2$, work out the formula $(X^TX)^{-1}X^Ty$.
+
+\item{(b)} For $p=2$, work out the formula $\sigma^2(X^TX)^{-1}$.
+
+\item{(c)} Do these formulas give you the same answers that we learned for $p=2$ in class?
+
+\end{enumerate}
+
+\subsection{(LSE=MLE)} For $y \sim N(X\beta, \sigma^2 I_n)$ write down the likelihood function of $y$.  Show that maximizing the likelihood function is equivalent to minimizing $\|y-X\beta\|^2$.
+\end{document}
+\grid
