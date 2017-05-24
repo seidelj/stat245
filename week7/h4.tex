@@ -18,7 +18,7 @@
 \newpage
 \pagenumbering{arabic}
 
-\subsection{Sampling distribution: simple derivation}
+\subsection{1. Sampling distribution: simple derivation}
 Consider independent observations $y_1,...,y_n \sim N(\beta_0, \sigma^2)$
 .  The MLE of $\beta_0$ is $\hat{\beta}_0=\overline{y}$.  The residual is $\hat{e}_i=y_i-\overline{y}$ for $i=1,...,n$.  In class we learned $\overline{y}\sim N(\beta_0, \frac{\sigma^2}{n})$ and $\sum_{i=1}^n \hat{e}_i^2/\sigma^2 \sim \chi_{n-1}^2$.  In order to obtain a t-distribution, we need independence between $\overline{y}$ and $\sum_{i=1}^n \hat{e}_i^2$.  Here is a simple way to do it.
 
@@ -38,7 +38,7 @@ Since we found $\Cov(\overline{y},\hat{e}_i)=0$ by the Gaussian assumption we ma
 
 \end{enumerate}
 
-\subsection{Residual} Consider independent observations $y_i \sim N(\beta_0+\beta_1x_i,\ \sigma^2)$ for $i=1,...,n$.  For the LSE $\hat{\beta}_0$ and $\hat{\beta}_1$, define the residual $\hat{e}_i = y_i - (\hat{\beta}_0+\hat{\beta}_1x_i)$ for $i=1,...,n$.
+\subsection{2. Residual} Consider independent observations $y_i \sim N(\beta_0+\beta_1x_i,\ \sigma^2)$ for $i=1,...,n$.  For the LSE $\hat{\beta}_0$ and $\hat{\beta}_1$, define the residual $\hat{e}_i = y_i - (\hat{\beta}_0+\hat{\beta}_1x_i)$ for $i=1,...,n$.
 \begin{enumerate}
 \item[(a)] Calculate $\mathbb{E}\big(\frac{1}{n-2} \sum_{i=1}^n \hat{e}_i^2\big)$.
 
@@ -116,7 +116,7 @@ allowing us to claim independence.
 
 \end{enumerate}
 
-\subsection{Joint Distribution of $(\hat{\beta}_0, \hat{\beta}_1)$} Consider independent observations $y_i \sim N(\beta_0+\beta_1x_i,\ \sigma^2)$ for $i=1,...,n$. For the LSE $\hat{\beta}_0$ and $\hat{\beta}_1$ we derived $\Var(\hat{\beta}_0)$ and $\Var(\hat{\beta}_1)$ in the class.
+\subsection{3. Joint Distribution of $(\hat{\beta}_0, \hat{\beta}_1)$} Consider independent observations $y_i \sim N(\beta_0+\beta_1x_i,\ \sigma^2)$ for $i=1,...,n$. For the LSE $\hat{\beta}_0$ and $\hat{\beta}_1$ we derived $\Var(\hat{\beta}_0)$ and $\Var(\hat{\beta}_1)$ in the class.
 
 \begin{enumerate}
 
@@ -153,7 +153,7 @@ Then
 \]
 \end{enumerate}
 
-\subsection{Linear regression without slope} Consider independent observations $y_i \sim N(\beta_1x_i, \sigma^2)$ for $i=1,...,n$.
+\subsection{4. Linear regression without slope} Consider independent observations $y_i \sim N(\beta_1x_i, \sigma^2)$ for $i=1,...,n$.
 
 \begin{enumerate}
 
@@ -179,7 +179,7 @@ Minimize by taking the derivative and setting it equal to $0$,
 
 \end{enumerate}
 
-\subsection{Linear regression with centered covariates} Some people like to center there $x_i$ before applying regression.  This leads to the model $y_i \sim N(\beta_0 + \beta_1(x_i-\overline{x}), \ \sigma^2)$ independently for $i=1,...,n$.
+\subsection{5. Linear regression with centered covariates} Some people like to center there $x_i$ before applying regression.  This leads to the model $y_i \sim N(\beta_0 + \beta_1(x_i-\overline{x}), \ \sigma^2)$ independently for $i=1,...,n$.
 
 \begin{enumerate}
 \item[(a)] Find the MLE for $\beta_0, \beta_1$, denoted as $\hat{\beta}_0, \hat{\beta}_1$.
@@ -202,7 +202,7 @@ Expectations are $\beta_0$ and $\beta_1$, respectively.
 \end{enumerate}
 
 
-\subsection{Check the matrix formula}  For the multivariate linear regression with model $y\sim N(X\beta, \sigma^2 I_n)$, we showed in class that the MLE is $\hat{\beta}=(X^TX)^{-1}X^Ty$. It has distribution $\hat{\beta} \sim N(\beta, \ \sigma^2(X^TX)^{-1})$.  Now consider the simple case of $p=2$ so that
+\subsection{6. Check the matrix formula}  For the multivariate linear regression with model $y\sim N(X\beta, \sigma^2 I_n)$, we showed in class that the MLE is $\hat{\beta}=(X^TX)^{-1}X^Ty$. It has distribution $\hat{\beta} \sim N(\beta, \ \sigma^2(X^TX)^{-1})$.  Now consider the simple case of $p=2$ so that
 
 \[ \beta=
 \begin{pmatrix}
@@ -229,12 +229,69 @@ y_n
 
 \item{(a)} For $p=2$, work out the formula $(X^TX)^{-1}X^Ty$.
 
+First
+\[ X^TX = \begin{pmatrix}
+n & \sum_{i=1}^n x_i\\
+\sum_{i=1}^n x_i & \sum_{i=1}^n x_i^2
+\end{pmatrix}
+\]
+and
+\[ (X^TX)^{-1} = \frac{1}{n\sum_{i=1}^n x_i^2 - (\sum_{i=1}^nx_i)^2}
+\begin{pmatrix}
+\sum_{i=1}^n x_i^2 & -\sum_{i=1}^n x_i\\
+-\sum_{i=1}^n x_i & n
+\end{pmatrix}.
+\]
+
+Therefore
+\begin{multline*}
+(X^TX)^{-1}X^Ty=\\
+\frac{1}{n\sum_{i=1}^n x_i^2 - (\sum_{i=1}^nx_i)^2}
+\begin{pmatrix}
+(\sum_{i=1}^nx_i^2)(\sum_{i=1}^ny_i) - (\sum_{i=1}^nx_i)(\sum_{i=1}^nx_iy_i)\\
+-(\sum_{i=1}^nx_i)(\sum_{i=1}^ny_i) + n\sum_{i=1}^nx_iy_i
+\end{pmatrix}.
+\end{multline*}
+
+The value on the second row is
+\begin{align*}
+&\frac{-(\sum_{i=1}^nx_i)(\sum_{i=1}^ny_i) + n\sum_{i=1}^n x_iy_i}{n\sum_{i=1}^nx_i^2 -(\sum_{i=1}^nx_i)^2}\\
+&= \frac{\frac{1}{n}\sum_{i=1}^n x_iy_i - \overline{x}\overline{y}}{\frac{1}{n}\sum_{i=1}^nx_i^2 - \overline{x}^2}.
+\end{align*}
+
+For the first row
+\begin{align*}
+&\frac{(\sum_{i=1}^nx_i^2)(\sum_{i=1}^ny_i) - (\sum_{i=1}^nx_i)(\sum_{i=1}^nx_iy_i)}{n\sum_{i=1}^n x_i^2 - (\sum_{i=1}^nx_i)^2}\\
+&=\frac{(\frac{1}{n}\sum_{i=1}^nx_i^2)\overline{y}-\overline{x}(\frac{1}{n}(\sum_{i=1}^nx_iy_i)}{\frac{1}{n}\sum_{i=1}^nx_i^2-\overline{x}^2}\\
+&=\frac{(\frac{1}{n}\sum_{i=1}^nx_i^2)\overline{y}-\overline{x}^2\overline{y}+\overline{x}^2\overline{y}-\overline{x}(\frac{1}{n}(\sum_{i=1}^nx_iy_i)}{\frac{1}{n}\sum_{i=1}^nx_i^2-\overline{x}^2}\\
+&= \overline{y} - \overline{x}\frac{\frac{1}{n}\sum_{i=1}^n x_iy_i - \overline{x}\overline{y}}{\frac{1}{n}\sum_{i=1}^nx_i^2 - \overline{x}^2}\\
+&= \overline{y}-\hat{\beta}_1\overline{x}.
+\end{align*}
 \item{(b)} For $p=2$, work out the formula $\sigma^2(X^TX)^{-1}$.
+On the first row, first column
+\begin{align*}
+\Var(\hat{\beta}_0) &= \sigma^2\frac{\sum_{i=1}^nx_i^2}{n\sum_{i=1}^nx_i^2-(\sum_{i=1}^nx_i)^2}\\
+&= \frac{\sigma^2}{n}\frac{n\sum_{i=1}^nx_i^2 -(\sum_{i=1}^nx_i)^2+(\sum_{i=1}^nx_i)^2}{n\sum_{i=1}^nx_i^2-(\sum_{i=1}^nx_i)^2}\\
+&=\frac{\sigma^2}{n}\Big(1 + \frac{(\sum_{i=1}^nx_i)^2}{n\sum_{i=1}^nx_i^2-(\sum_{i=1}^nx_i)^2}\Big)\\
+&=\frac{\sigma^2}{n} + \frac{\overline{x}\sigma^2}{\sum_{i=1}^n(x_i-\overline{x})^2}.
+\end{align*}
+
+The entry in the second row, second column
+\begin{align*}
+\Var(\hat{\beta}_1) &= \frac{\sigma^2n}{n\sum_{i=1}^nx_i^2 - (\sum_{i=1}^nx_i)^2}\\
+&= \frac{\sigma^2}{\sum_{i=1}^n(x_i-\overline{x})^2}.
+\end{align*}
 
 \item{(c)} Do these formulas give you the same answers that we learned for $p=2$ in class?
+yes.
 
 \end{enumerate}
 
-\subsection{(LSE=MLE)} For $y \sim N(X\beta, \sigma^2 I_n)$ write down the likelihood function of $y$.  Show that maximizing the likelihood function is equivalent to minimizing $\|y-X\beta\|^2$.
+\subsection{7. (LSE=MLE)} For $y \sim N(X\beta, \sigma^2 I_n)$ write down the likelihood function of $y$.  Show that maximizing the likelihood function is equivalent to minimizing $\|y-X\beta\|^2$.
+
+The likelihood function is the PDF of $N(X\beta,\ \sigma^2I_n)$.  Therefore
+\[ l(\beta) = \Big(\frac{1}{\sqrt{2\pi\sigma^2}}\Big)^n e^{-\frac{1}{2\sigma^2}\|y-X\beta\|^2} \]
+
+which is maximized when $\|y-X\beta\|^2$ is minimized.
 \end{document}
 \grid
