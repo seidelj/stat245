@@ -25,7 +25,23 @@ A symmetric Matrix $P \in \mathbb{R}^{n \times n}$ is a projection matrix if $P^
 
 \item[(a)] Find $(I_n - P)^2$ and $(I_n - P)P$.
 
+\begin{align*}
+(I_n - P)^2 &= (I_n - P)(I_n - P)\\
+&= I_n^2 + P^2 - 2PI_n\\
+&= I_n + P - 2P\\
+&= I_n - P
+\end{align*}
+
+\begin{align*}
+(I_n-P)P &= P - P^2\\
+&= P-P=0
+\end{align*}
+
 \item[(b)] Assume rank$(P)=r$, and then find all eigenvalues of $P$.
+
+If $P$ is a projection matrix in $\mathbb{R}^{nxn}$ then
+\[ \lambda x = Px = P^2 x = \lambda^2 x \]
+where $x \in \mathbb{R}^n$ is not $0$ implies $\lambda = 1$ or $0$.  Since rank$(P)=r$, then eigen values are $1$ with r multiplicity and $0$s with $(n-r)$ multiplicity.
 
 \end{enumerate}
 
@@ -61,9 +77,32 @@ A symmetric Matrix $P \in \mathbb{R}^{n \times n}$ is a projection matrix if $P^
 
 \end{enumerate}
 
-\subsection{Projection Matrix 3.} A symmetric matrix $P\in \mathbb{R}^{n\times n}$ is a projection matrix if $P^2=P$.  Assume rank$P=r$, for $z \sim N(0, I_n)$, use eigenvalue decomposition to find the distribution of $z^TPz$.
+\subsection{Projection Matrix 3.} A symmetric matrix $P\in \mathbb{R}^{n\times n}$ is a projection matrix if $P^2=P$.  Assume rank$(P)=r$, for $z \sim N(0, I_n)$, use eigenvalue decomposition to find the distribution of $z^TPz$.
 
+Based on the givens, there $\exists Q$ such that
+\[ P = Q \Lambda Q^T \]
+where $Q$ is an orthonormal matrix and
+\[ \Lambda = \begin{pmatrix}
+1 & 0 & \dots & 0\\
+0 & 1 & \dots & 0\\
+0 & 0 & \dots & 0\\
+\end{pmatrix}
+\]
 
+with $r$ $1$s and $(n-r)$ $0$s along the diagonal.  Then
+
+\[ z^TPz = z^T Q\Lambda Q^Tz \]
+
+and let $z^TQ = y^T$ then $y \sim N(0, Q^TI_nQ)$ $\Rightarrow y \sim N(0, I_n)$.
+
+Then
+\[ y^T \Lambda y =y^T
+\begin{pmatrix}
+I_r & \ \\
+\ & 0
+\end{pmatrix}
+y = \sum_{i=1}^r y_i^2 \sim \chi_r^2
+\]
 \subsection{Variance Bias Trade-off.}  For any estimator $\hat{\theta}$, prove $\mathbb{E}(\hat{\theta}-\theta)^2 = \Var(\hat{\theta})+ (\mathbb{E}\hat{\theta} - \theta)^2$.
 
 \begin{align*}
@@ -83,11 +122,44 @@ A symmetric Matrix $P \in \mathbb{R}^{n \times n}$ is a projection matrix if $P^
 \begin{enumerate}
 \item[(a)] Define $\hat{\sigma}^2 = \frac{1}{n-p}\|\hat{e}\|^2$. What is $\mathbb{E}\hat{\sigma}^2$?
 
+\begin{align*}
+\E(\hat{\sigma}^2 &= \E\Big(\frac{1}{n-p}\|\hat{e}\|^2\Big)\\
+&= \frac{1}{n-p}\E(\|\hat{e}\|^2)\\
+&= \frac{1}{n-p}\E(\|\hat{e}\|^2\frac{\sigma^2}{\sigma^2})\\
+&= \frac{1}{n-p}\sigma^2 \E(\|\hat{e}\|^2/\sigma^2)\\
+&= \frac{n-p}{n-p}\sigma^2 = \sigma^2
+\end{align*}
+
 \item[(b)] What is $\mathbb{E}(\hat{\sigma}^2-\sigma^2)^2$?
+
+This is the same as MSE from question 4.
+
+\begin{align*}
+\mathbb{E}(\hat{\sigma}^2-\sigma^2)^2 &= \Var(\hat{\sigma}^2) + \text{Bias}^2\\
+&= \frac{\sigma^42(n-p)}{(n-p)^2}\\
+&= \frac{\sigma^4 2}{n-p}
+\end{align*}
 
 \item[(c)] Define $\tilde{\sigma}^2= \frac{1}{n}\|\hat{e}^2\|^2$.  What is $\mathbb{E}(\tilde{\sigma}^2 - \sigma^2)$?
 
+\begin{align*}
+\mathbb{E}(\tilde{\sigma}^2 - \sigma^2) &= \Var(\tilde{\sigma}^2) + (\E\tilde{\sigma}^2 - \sigma^2)^2 \\
+&= \frac{2 \sigma^4 (n-p)}{n^2} + \Big(\frac{(n-p)\sigma^2}{n} - \sigma^2 \Big)^2\\
+&= \frac{2(n-p)}{n^2}\sigma^4 + \frac{p^2}{n^2}\sigma^4\\
+&= \frac{(2n-2p+p^2)\sigma^4}{n^2}
+\end{align*}
+
 \item[(d)] Consider $\sigma_c^2 = c\|\hat{e}\|^2$.  Find the $c$ such that $\E(\sigma_c^2-\sigma^2)^2$ is the smallest.
+
+\begin{align*}
+\text{MSE}(\sigma_c^2) &= \Var(\sigma_c^2) + (\E(\sigma_c^2) - \sigma_c^2)^2\\
+&= 2c^2(n-p)\sigma^4 + [c(n-p)\sigma^2 - \sigma^2]^2
+\end{align*}
+
+Let
+\[ \pdv{\text{MSE}}{c} = 4c\sigma^4(n-p) + 2\sigma^4(c(n-p)-1)(n-p) = 0 \]
+
+Then $c=\frac{1}{n-p+2}$
 \end{enumerate}
 
 \subsection{Variance estimation 2.} Consider linear model $y \sim N(X\beta,\ , \sigma^2I_n)$.
@@ -95,7 +167,38 @@ A symmetric Matrix $P \in \mathbb{R}^{n \times n}$ is a projection matrix if $P^
 \begin{enumerate}
 \item[(a)] Find the joint MLE of $(\beta, \sigma^2)$, denoted as $(\hat{\beta},\hat{\sigma}^2)$.
 
+\begin{align*}
+f(y) &= \Big(\frac{1}{\sqrt{2\pi}}\Big)^n \cdot \frac{1}{|\Sigma|^\frac{1}{2}} \text{exp}(-\frac{1}{2}(y-X\beta)^T(\sigma^2I_n)(y-X\beta))\\
+\end{align*}
+
+\[ l(y) = -\frac{n}{\Sigma}\log(\sigma^2) - \frac{1}{2\sigma^2} \cdot \|y-X\beta\|^2 \]
+
+Setting $\pdv{l}{\beta}=0$ implies
+\[ \hat{\beta} = (X^TX)^{-1}X^Ty \]
+and $\pdv{l}{\sigma^2}$, replaced $\beta=\hat{\beta}$
+\[ \hat{\sigma}=\frac{1}{n}y^T(I-X(X^TX)^{-1}X^T)y \]
+
 \item[(b)] Construct a pivotal of $\sigma^2$ using $\hat{\sigma}^2$.  Find an exact $95\%$ confidence interval of $\sigma^2$.
+
+\[ \hat{\sigma}^2 = \frac{\|\hat{e}\|^2}{n} \]
+
+where
+
+\[ \frac{\|\hat{e}\|^2}{\sigma^2} \sim \chi_{n-p}^2 \]
+
+therefore
+
+\[ \frac{n\hat{\sigma}^2}{\sigma^2} \sim \chi_{n-p}^2 \]
+is a pivitol.
+
+To find $95\%$ confidence interval
+
+\[ \chi_{n-p}^2(1-\alpha/2) \leq \frac{n\hat{\sigma}^2}{\sigma^2} \leq \chi_{n-p}^2(\alpha/2) \]
+
+therefore
+
+\[ [\frac{n\hat{\sigma}^2}{\chi_{n-p}^2(\alpha/2)},\frac{n\hat{\sigma}^2}{\chi_{n-p}^2(1-\alpha/2)}]
+\]
 \end{enumerate}
 
 \subsection{Data Analysis} Download NewHaven.txt from chalk.  Set a up a working directory on your own computer, and read the data into R.  Write a report of data analysis that addresses the following items.  The report should be printed and submitted together with the homework.  No need to include the code.

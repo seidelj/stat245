@@ -1,0 +1,105 @@
+\documentclass{tufte-book}
+
+\usepackage{amsmath, amsthm}
+\usepackage{graphicx}
+\setkeys{Gin}{width=\linewidth,totalheight=\textheight,keepaspectratio}
+\graphicspath{{graphics/}}
+
+\title{STAT  245\\Final Review}
+\author{Joe Seidel}
+\date{\today}
+
+\input{../preamble.tex}
+
+\begin{document}
+
+\maketitle
+\pagenumbering{gobble}
+\newpage
+\pagenumbering{arabic}
+
+
+\subsection{8. Common Variance, different mean}
+Consider $X_1,...,X_n \sim N(\mu_1, \sigma^2)$ and $X_{n+1},...,X_{2n} \sim N(\mu_2, \sigma^2)$.  Everything is independent here.
+
+\begin{enumerate}
+
+\item Fine the MLE of $\sigma^2$, denoted $\hat{\sigma}^2$.
+
+The likelihood function $L(\sigma^2)$ is
+\[  L(\sigma^2) = \prod_{i=1}^n \frac{1}{\sqrt{2\pi\sigma^2}}\exp[\frac{-(x_i-\mu_1)^2}{2\sigma^2}]\prod_{i=n+1}^{2n} \frac{1}{\sqrt{2\pi\sigma^2}}\exp[\frac{-(x_i-\mu_2)^2}{2\sigma^2}] \]
+after some organization is equivently
+
+\[ L(\sigma^2) = \Big(\frac{1}{2\pi\sigma^2}\Big)^n \exp[-\frac{1}{2\sigma^2}\sum_{i=1}^n(x_i-\mu_1)^2 - \frac{1}{2\sigma^2}\sum_{i=n+1}^{2n}(x_i-\mu_2)^2]. \]
+
+Taking the log,
+
+\[ l(\sigma^2) = -\frac{1}{2\sigma^2}\sum_{i=1}^n(x_i-\mu_1)^2 - \frac{1}{2\sigma^2}\sum_{i=n+1}^{2n}(x_i-\mu_2)^2 + n\log(2\pi\sigma^2) \]
+
+setting $l(\sigma^2) = 0$
+
+\[ \hat{\sigma}^2 = \frac{1}{2n}[ \sum_{i=1}^n(x_i - \hat{\mu}_1)^2 + \sum_{i=n+1}^{2n}(x_i-\hat{\mu}_2)^2] \]
+
+\item Based on $\hat{\sigma}^2$, construct and exact confidence interval of $\sigma^2$.
+
+We know that
+\[ \frac{\sum_{i=1}^n(x_i - \hat{\mu}_1)^2}{\sigma^2} \sim \chi_{n-1}^2 \]
+and
+\[ \frac{\sum_{i=n+1}^{2n}(x_i - \hat{\mu}_2)^2}{\sigma^2} \sim \chi_{n-1}^2. \]
+
+These facts imply
+
+\[ \frac{2n\hat{\sigma}^2}{\sigma^2} \sim \chi_{2n-2}^2 \]
+which is a pivotal and can be used to construct the confidence interval.
+
+\end{enumerate}
+
+\subsection{9. Poisson Regression}
+Consider $y_i \sim \text{Poisson}(\beta_1x_1)$ independetly for $i=1,...,n$.
+
+\begin{enumerate}
+\item What is the distribution of $\sum_{i=1}^ny_i$?
+
+In Stat 244, we've shown
+
+\[ \sum_{i=1}^ny_i \sim \text{Poisson}(\beta_1\sum_{i=1}^nx_i). \]
+
+\item Consider the estimator $\hat{\beta}_1 = \frac{\overline{y}}{\overline{x}}$, find $\E(\hat{\beta}_1)$ and $\Var(\hat{\beta}_1)$.
+
+\[ \E(\hat{\beta}_1) = \frac{\E(\sum_{i=1}^ny_i)}{\sum_{i=1}^nx_i} = \frac{\beta_1 \sum_{i=1}^nx_i}{\sum_{i=1}^nx_i} = \beta_1 \]
+
+\begin{align*}
+\Var(\hat{\beta}_1) &= \frac{\Var(\sum_{i=1}^ny_i)}{(\sum_{i=1}^nx_i)^2}\\
+&= \frac{\beta_1\sum_{i=1}^nx_i}{(\sum_{i=1}^nx_i)^2} = \frac{\beta_1}{\sum_{i=1}^nx_i}
+\end{align*}
+
+\item Find the asymptotic distribution of $\sqrt{n}(\hat{\beta}_1-\beta_1)$. (Hint: it's normal just find the mean and variance).
+
+First recall
+\[ \frac{\hat{\beta}_1-\beta_1}{\sqrt{\frac{\beta_1}{\sum_{i=1}^nx_i}}} \leadsto N(0,1) \]
+which means
+
+\[ \sqrt{n}(\hat{\beta}_1-\beta_1) = \sqrt{\frac{n\beta_1}{\sum_{i=1}^nx_i}} \frac{\hat{\beta}_1-\beta_1}{\sqrt{\frac{\beta_1}{\sum_{i=1}^nx_i}}} \leadsto N(0, \frac{\beta_1}{\overline{x}}). \]
+
+\item Find a transformation $g$ such that the asymptotic distribution of $\sqrt{n}(g(\hat{\beta}_1) - g(\beta_1))$  does not depend on $\beta_1$.
+
+
+The delta method tells us that
+
+\[ \sqrt{n}(g(\hat{\beta}_1) - g(\beta_1)) \leadsto N(0, |g'(\beta_1)|^2\frac{\beta_1}{\overline{x}}) \]
+
+therefore we want $|g'(\beta_1)|^2 = 1$.  This implies we should let
+
+\[ g'(\beta_1) = \frac{1}{\sqrt{\beta_1}}. \]
+
+Then
+
+\[ g(\beta_1) = \int g'(\beta_1) \propto \sqrt{\beta_1} \]
+
+\item Is $\hat{\beta_1}$ the MLE?
+
+A a log likelihood transformation set equal to $0$ will conlude the answer is YES.
+\end{enumerate}
+
+\end{document}
+\grid
